@@ -1166,9 +1166,13 @@ imgIn('X/rec1_clean2.png',rec1);imgIn('X/rec3_clean.png',rec3);imgIn('X/rec4_cle
   navHS(p,'rec')});
 
 // --- calendar + day records (rec1) ---
-const D0=new Date(2022,4,1);const dayIdx=(m,d)=>Math.round((new Date(2022,m-1,d)-D0)/864e5);
-const idxDate=i=>new Date(2022,4,1+i);const wdI=i=>(idxDate(i).getDay()+6)%7;
-const START_I=dayIdx(5,3),TODAY_I=dayIdx(7,14);let selI=TODAY_I,cI=TODAY_I,calMonth=7,calP=0,calAnim=null;
+const _N=new Date(),TD=new Date(_N.getFullYear(),_N.getMonth(),_N.getDate()),START_D=new Date(TD.getFullYear(),TD.getMonth(),TD.getDate()-59);
+const D0=new Date(START_D.getFullYear(),START_D.getMonth(),1);
+const yearOf=m=>TD.getFullYear();
+const dayIdx=(m,d)=>Math.round((new Date(yearOf(m),m-1,d)-D0)/864e5);
+const idxDate=i=>new Date(D0.getFullYear(),D0.getMonth(),1+i);const wdI=i=>(idxDate(i).getDay()+6)%7;
+const START_I=Math.round((START_D-D0)/864e5),TODAY_I=Math.round((TD-D0)/864e5);let selI=TODAY_I,cI=TODAY_I,calMonth=TD.getMonth()+1,calP=0,calAnim=null;
+const CAL_MONTHS=[1,2,3,4,5,6,7,8,9,10,11,12];
 const COLX=[80,202,324,446,568,690,813],DN=['월','화','수','목','금','토','일'],COLW=122;
 const R1=ovl(rec1,true);R1.style.zIndex=6;
 // date strip (horizontally draggable)
@@ -1194,7 +1198,7 @@ const R1w=div(R1,{left:'0px',top:'545px',width:'890px',height:'1193px',overflow:
 const R1i=div(R1w,{left:'0px',top:'0px',width:'890px',height:'1000px',willChange:'transform,opacity'});
 const r1Scroll=makeScroller(R1w,R1i,()=>Math.max(0,R1i.chH-1193+20));
 const WKD=['일','월','화','수','목','금','토'];
-function renderDay(anim){const logs=selI==TODAY_I?NLOG:[];const recs=logs.map(l=>[l.h,l.m,'u',({dive:1,balloon:2,tidy:4,shake:3})[l.kind]||1,l]).concat(recsFor(selI)),dd=idxDate(selI);R1i.innerHTML='';
+function renderDay(anim){const logs=selI==TODAY_I?NLOG:[];const recs=logs.map(l=>[l.h,l.m,'u',({dive:1,balloon:2,tidy:4,shake:3})[l.kind]||1,l]).concat(recsFor(selI).slice().reverse()),dd=idxDate(selI);R1i.innerHTML='';
   const lbl=(dd.getMonth()+1)+'월 '+dd.getDate()+'일 '+WKD[dd.getDay()]+'요일'+(selI==TODAY_I?' · 오늘':'');
   txt(R1i,40,44,lbl,{size:32,w:800,color:'#0b4d58'});txt(R1i,850,44,'노타 '+recs.length+'회',{size:30,w:700,color:'#0b4d58',align:'r'});
   recs.forEach((r,k)=>{const al=r[2]=='a',y=88+k*217;
@@ -1218,12 +1222,12 @@ const monthT=txt(sheet,56,277,'',{size:46,w:800,color:'#3B2B22'});const monthC=c
 DN.forEach((n,c)=>txt(sheet,COLX[c],383,n,{size:32,w:400,color:'#6B5E58',align:'c'}));
 const gridL=div(sheet,{left:'0px',top:'0px',width:'890px',height:'1136px'});
 const monthBtn=div(sheet,{left:'40px',top:'240px',width:'230px',height:'80px',cursor:'pointer'});
-const monthPop=div(sheet,{left:'40px',top:'320px',width:'360px',height:'0px',overflow:'hidden',borderRadius:'28px',background:'#fff',boxShadow:'0 10px 30px rgba(0,0,0,.25)',transition:'height .25s',zIndex:3});
-[5,6,7].forEach((m,i)=>{const b=div(monthPop,{left:'0px',top:(i*86)+'px',width:'360px',height:'86px',cursor:'pointer'});b.dataset.m=m;txt(b,40,43,'2026년 '+m+'월',{size:42,w:700,color:'#3B2B22'});b.cs=txt(b,315,43,'✓',{size:42,w:800,color:'#FFA800',align:'c'})});
-let popOpen=false;function setPop(v){popOpen=v;monthPop.style.height=v?'258px':'0px';monthPop.style.pointerEvents=v?'auto':'none'}
-function drawGrid(){gridL.innerHTML='';monthT.textContent='2026년 '+calMonth+'월';monthC.style.left=(56+monthT.offsetWidth+34-24)+'px';
+const monthPop=div(sheet,{left:'40px',top:'320px',width:'360px',height:'0px',overflow:'hidden',touchAction:'pan-y',borderRadius:'28px',background:'#fff',boxShadow:'0 10px 30px rgba(0,0,0,.25)',transition:'height .25s',zIndex:3});
+CAL_MONTHS.forEach((m,i)=>{const b=div(monthPop,{left:'0px',top:(i*86)+'px',width:'360px',height:'86px',cursor:'pointer'});b.dataset.m=m;txt(b,40,43,yearOf(m)+'년 '+m+'월',{size:42,w:700,color:'#3B2B22'});b.cs=txt(b,315,43,'✓',{size:42,w:800,color:'#FFA800',align:'c'})});
+let popOpen=false;function setPop(v){popOpen=v;monthPop.style.height=v?(6*86)+'px':'0px';monthPop.style.overflowY=v?'auto':'hidden';if(v)monthPop.scrollTop=Math.max(0,(calMonth-3)*86);monthPop.style.pointerEvents=v?'auto':'none'}
+function drawGrid(){gridL.innerHTML='';monthT.textContent=yearOf(calMonth)+'년 '+calMonth+'월';monthC.style.left=(56+monthT.offsetWidth+34-24)+'px';
   [...monthPop.children].forEach(b=>b.cs.style.opacity=(+b.dataset.m==calMonth)?1:0);
-  const first=wdI(dayIdx(calMonth,1)),n=new Date(2022,calMonth,0).getDate(),rows=Math.ceil((first+n)/7),pitch=rows>5?106:127.5,y0=rows>5?478:493;
+  const first=wdI(dayIdx(calMonth,1)),n=new Date(yearOf(calMonth),calMonth,0).getDate(),rows=Math.ceil((first+n)/7),pitch=rows>5?106:127.5,y0=rows>5?478:493;
   for(let d=1;d<=n;d++){const idx=first+d-1,c=idx%7,r=Math.floor(idx/7),x=COLX[c],y=y0+r*pitch,di=dayIdx(calMonth,d);
     const ok=di>=START_I&&di<=TODAY_I,on=di==selI;
     if(on)div(gridL,{left:(x-41)+'px',top:(y-41)+'px',width:'82px',height:'82px',borderRadius:'50%',background:'#FFA800'});
