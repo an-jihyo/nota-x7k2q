@@ -756,7 +756,7 @@ let holding=false,soundOn=true,alarmRun=null,game=null;
 
 // ---------- layout ----------
 function layout(){
-  const vw=innerWidth,vh=innerHeight,AR=852/393;const w=Math.min(vw,vh/AR),h=w*AR;
+  const vw=innerWidth,vh=innerHeight,AR=852/393;const k=vh/(vw*AR);let w,h;if(k>=.72&&k<=1.25&&vw<700){w=vw;h=vh}else{w=Math.min(vw,vh/AR);h=w*AR}
   scr.style.width=w+'px';scr.style.height=h+'px';
   document.documentElement.style.setProperty('--nf',(w/890).toFixed(5));document.documentElement.style.setProperty('--nfy',(h/1939).toFixed(5));
   scr.classList.toggle('frame',vw>w*1.18||vh>h*1.08);
