@@ -868,6 +868,7 @@ const imgIn=(src,p)=>{const i=img(src,null,p);return i};
 
 // ---------- splash ----------
 const splash=mkPage('splash');imgIn('X/splash.png',splash);
+txt(nat(splash),800,170,'v18',{size:28,w:700,color:'rgba(255,255,255,.6)',align:'c'});
 // ---------- home ----------
 const home=mkPage('home');imgIn('X/home_clean.png',home);
 const _sd=new Date();_sd.setDate(_sd.getDate()-59);const START_STR=_sd.getFullYear()+'년 '+(_sd.getMonth()+1)+'월 '+_sd.getDate()+'일';
@@ -1741,4 +1742,4 @@ async function boot(){
 boot();
 
 </script>
-<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{})</script></body></html>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>{r.update().catch(()=>{});if(r.waiting)location.reload()}).catch(()=>{})</script></body></html>
