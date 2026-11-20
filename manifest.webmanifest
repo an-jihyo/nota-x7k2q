@@ -1,1 +1,1 @@
-{"name": "NOTA 노타", "short_name": "NOTA", "start_url": "./", "display": "fullscreen", "orientation": "portrait", "background_color": "#3be0dc", "theme_color": "#3be0dc", "icons": [{"src": "scr/logo.webp", "sizes": "512x512", "type": "image/webp"}]}
+{"name": "NOTA 노타", "short_name": "NOTA", "start_url": "./", "display": "standalone", "orientation": "portrait", "background_color": "#00D2B2", "theme_color": "#00D2B2", "icons": [{"src": "scr/logo.webp", "sizes": "512x512", "type": "image/webp"}]}
