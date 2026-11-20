@@ -19,6 +19,7 @@ html,body{height:100%;margin:0;padding:0;overflow:hidden;background:#00D2B2;over
 #scr{position:relative;overflow:hidden;background:#00D2B2;color:#fff;flex:none}
 .a{position:absolute}
 .scr .lay,#scr .lay{position:absolute;left:0;top:0;width:100%;height:100%}
+#scr .lay.tb,.lay.tb{top:calc(-1*var(--tbT,0px));height:calc(100% + var(--tbT,0px));--nfy:var(--nfyT)}
 .scr .lay img,#scr .lay img{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}
 .hs{position:absolute;background:transparent;border:0;padding:0;margin:0;z-index:20;outline:none;cursor:pointer}
 .hs[disabled]{display:none}
@@ -766,8 +767,11 @@ function layout(){
   scr.style.width=w+'px';scr.style.height=h+'px';
   scr.style.marginTop=(it+Math.max(0,(vh-h)/2))+'px';scr.style.marginLeft=((il-ir)/2)+'px';
   document.documentElement.style.setProperty('--nf',(w/890).toFixed(5));document.documentElement.style.setProperty('--nfy',(h/NH).toFixed(5));
+  const TB=90,T=h*TB/(NH-TB);document.documentElement.style.setProperty('--tbT',T.toFixed(3)+'px');document.documentElement.style.setProperty('--nfyT',((h+T)/NH).toFixed(5));
   scr.classList.toggle('frame',vw>w*1.18||vh>h*1.08);
 }
+const TBP=['splash','home','mate','com1','post','write','rec1','rec3','rec4','my','my2','goal1','goal2','goal3','settings','profile'];
+function markTB(){TBP.forEach(n=>{const p=pages[n];if(p)p.classList.add('tb')})}
 addEventListener('resize',layout);addEventListener('orientationchange',()=>setTimeout(layout,300));if(window.visualViewport)visualViewport.addEventListener('resize',layout);layout();[120,500,1200,2500].forEach(t=>setTimeout(layout,t));
 function toNat(e){const r=scr.getBoundingClientRect();return [(e.clientX-r.left)/r.width*890,(e.clientY-r.top)/r.height*1939]}
 
@@ -884,7 +888,7 @@ const imgIn=(src,p)=>{const i=img(src,null,p);return i};
 
 // ---------- splash ----------
 const splash=mkPage('splash');imgIn('X/splash.png',splash);
-txt(nat(splash),800,170,'v23',{size:28,w:700,color:'rgba(255,255,255,.6)',align:'c'});
+txt(nat(splash),800,170,'v24',{size:28,w:700,color:'rgba(255,255,255,.6)',align:'c'});
 // ---------- home ----------
 const home=mkPage('home');imgIn('X/home_clean.png',home);
 const _sd=new Date();_sd.setDate(_sd.getDate()-59);const START_STR=_sd.getFullYear()+'년 '+(_sd.getMonth()+1)+'월 '+_sd.getDate()+'일';
@@ -1752,6 +1756,7 @@ async function boot(){
   await Promise.race([Promise.all([...jobs,fonts]),new Promise(r=>setTimeout(r,25000))]);
   showNow('splash');
   const ld=document.getElementById('loader');ld.style.opacity=0;setTimeout(()=>ld.remove(),450);
+  markTB();layout();
   last=performance.now();requestAnimationFrame(tick);setTimeout(()=>{if(curName=='splash')show('home')},1600);
   try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}
 }
