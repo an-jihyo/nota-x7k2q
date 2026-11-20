@@ -868,7 +868,9 @@ const imgIn=(src,p)=>{const i=img(src,null,p);return i};
 const splash=mkPage('splash');imgIn('X/splash.png',splash);
 // ---------- home ----------
 const home=mkPage('home');imgIn('X/home_clean.png',home);
+const _sd=new Date();_sd.setDate(_sd.getDate()-59);const START_STR=_sd.getFullYear()+'년 '+(_sd.getMonth()+1)+'월 '+_sd.getDate()+'일';
 const HN=ovl(home);
+txt(HN,306,454,START_STR+'부터',{size:40,w:400,color:'#680011'});
 const pill84=img('X/pill84.png',null,HN);pill84.style.cssText='position:absolute;left:628px;top:1371px;width:194px;height:50px;pointer-events:none';
 
 const PEOPLE=[{n:'우파루파',a:'wooparupa',d:31},{n:'하늘',a:'haneul',d:7},{n:'배유진',a:'baeyujin',d:12},{n:'진영',a:'jinyoung',d:60},
@@ -922,7 +924,7 @@ const clipBox=div(MA,{left:'0px',top:'236px',width:'890px',height:'1499px',overf
 const mIn=div(clipBox,{left:'0px',top:'0px',width:'890px',height:'1499px',willChange:'transform'});
 const cards=[];
 function mkOrigCard(i){const e=div(mIn,{left:'0px',top:(TOPS(i)-8-236)+'px',width:'890px',height:'315px',willChange:'transform',cursor:'pointer'});img('X/mt_c'+i+'.png',null,e);return e}
-function dateStr(days){const d=new Date(2026,10,18);d.setDate(d.getDate()-days);return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일'}
+function dateStr(days){const d=new Date();d.setDate(d.getDate()-days);return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일'}
 function mkDynCard(i,m){const e=div(mIn,{left:'0px',top:(TOPS(i)-8-236)+'px',width:'890px',height:'315px',willChange:'transform',cursor:'pointer'});
   div(e,{left:'20px',top:'8px',width:'848px',height:'283px',borderRadius:'46px',background:'#F8F5CB',boxShadow:'0 14px 0 #2FA3AF'});
   const av=img('X/av_'+m.a+'.png',null,e);Object.assign(av.style,{left:'58px',top:'41px',width:'196px',height:'196px',borderRadius:'50%'});
@@ -979,14 +981,14 @@ const detImg=img('X/mate_hd_clean.png',null,MH);
 const mAv=img('X/av_jinyoung.png',null,MH);Object.assign(mAv.style,{left:'58px',top:'303px',width:'196px',height:'196px'});
 const mName=txt(MH,322,338,'',{size:46,w:800,color:'#F2590B'});const mLast=txt(MH,0,338,'',{size:31,w:400,color:'#8a6a4a'});
 const mTag=div(MH,{left:'312px',top:'387px',width:'371px',height:'56px',borderRadius:'28px',background:'#FFFDEE'});txt(mTag,22,28,'목표',{size:30,w:800,color:'#5a3a12'});const mGoal=txt(mTag,92,28,'',{size:30,w:700,color:'#5a3a12'});
-const mDate=txt(MH,322,485,'2026년 5월 3일부터 <b style="font-weight:800">60일째</b>',{size:36,w:400,color:'#7A4A2A',html:true});
+const mDate=txt(MH,322,485,START_STR+'부터 <b style="font-weight:800">60일째</b>',{size:36,w:400,color:'#7A4A2A',html:true});
 const mR=[[737,800],[927,985]].map(([a,b])=>({t:txt(MH,292,a,'',{size:38,w:700,color:'#7A4A2A'}),s:txt(MH,292,b,'',{size:36,w:400,color:'#7A4A2A'})}));
 const mT1=txt(MH,78,1250,'',{size:54,w:800,color:'#F2590B',css:{background:'linear-gradient(transparent 52%,#FFE27A 52%)',padding:'0 10px 0 0'}});
 const mT2=txt(MH,78,1325,'',{size:54,w:800,color:'#F2590B',css:{background:'linear-gradient(transparent 52%,#5CE0FF 52%)',padding:'0 10px 0 0'}});
 const mQ=txt(MH,78,1407,'',{size:40,w:400,color:'#7A5A45'});
 mName.style.display='inline-block';
 function fillMate(i){const m=MATES[i];mAv.src=U('X/av_'+m.a+'.png');mName.textContent=m.n+'님';mLast.textContent=m.last;mLast.style.left=(322+Math.max(mName.offsetWidth,m.n.length*48+48)+26)+'px';
-  mDate.innerHTML=m.days?`${dateStr(m.days)}부터 <b style="font-weight:800">${m.days}일째</b>`:'2026년 5월 3일부터 <b style="font-weight:800">60일째</b>';
+  mDate.innerHTML=m.days?`${dateStr(m.days)}부터 <b style="font-weight:800">${m.days}일째</b>`:START_STR+'부터 <b style="font-weight:800">60일째</b>';
   mGoal.textContent=m.goal;
   [m.r1,m.r2].forEach((r,k)=>{mR[k].t.innerHTML=`${r[0]} &nbsp;&nbsp; ${r[1]}`;mR[k].s.textContent=r[2]});mT1.textContent=m.tg[0];mT2.textContent=m.tg[1];mQ.textContent=m.q}
 let accQ=0,accAnim=null,mSel=0;
@@ -1191,7 +1193,7 @@ const rng=s=>{let x=(s*2654435761)%4294967296||1;return()=>{x=(x*1664525+1013904
 const ALM=[['기상 직후 알림','좋은 아침이에요!'],['출근 직후 알림','오늘도 힘내봐요!'],['점심 직후 알림','점심 맛있게 드셨나요?'],['커피 후 알림','커피 한 잔 생각나시죠?'],['퇴근 직후 알림','수고했어요, 오늘 하루!'],['저녁 식후 알림','저녁은 맛있게 드셨나요?'],['취침 전 알림','내일도 같이 해봐요']];
 const DIRS=['회사가기 싫다','오전 시간이 너무 안가','아오 스트레스 받아','심심해서 손이 가요','식후 땡이 생각나요','친구가 피는 걸 봐서','잠깐 멍해져서','야근 중이에요','집중이 안 돼요','커피 마시다 보니','술자리에서 생각나서','운전하다가 생각나서'];
 const SLOTS=[[7,12],[7,15],[8,40],[9,30],[10,42],[11,50],[12,40],[13,55],[15,20],[16,35],[17,12],[18,45],[19,30],[21,5],[22,15]];
-function recsFor(i){if(i==TODAY_I)return[[7,12,'a',0,0],[7,15,'d',1,0],[10,42,'d',2,1],[12,40,'a',3,2],[17,12,'d',4,2],[19,30,'a',3,5],[21,5,'d',2,3]];
+function recsFor(i){if(i==TODAY_I){const n=new Date(),now=n.getHours()*60+n.getMinutes();return[[7,12,'a',0,0],[7,15,'d',1,0],[9,10,'a',3,1],[10,42,'d',2,1],[12,40,'a',3,2],[14,20,'a',0,3],[17,12,'d',4,2],[18,30,'a',3,4],[19,30,'a',3,5],[21,5,'d',2,3],[22,40,'a',0,6]].filter(r=>r[0]*60+r[1]<=now)}
   const r=rng(i*97+13),n=5+Math.floor(r()*4);const pool=SLOTS.slice();const pick=[];while(pick.length<n){pick.push(pool.splice(Math.floor(r()*pool.length),1)[0])}pick.sort((a,b)=>a[0]*60+a[1]-b[0]*60-b[1]);
   return pick.map(([h,m])=>{const al=r()<.42;let ai=h<8?0:h<10?1:h<14?2:h<17?3:h<19?4:h<22?5:6;return al?[h,m,'a',[0,3][Math.floor(r()*2)],ai]:[h,m,'d',[1,2,4][Math.floor(r()*3)],Math.floor(r()*DIRS.length)]})}
 const R1w=div(R1,{left:'0px',top:'545px',width:'890px',height:'1193px',overflow:'hidden',pointerEvents:'auto',touchAction:'none'});
@@ -1234,7 +1236,7 @@ function drawGrid(){gridL.innerHTML='';monthT.textContent=yearOf(calMonth)+'년 
     txt(gridL,x,y,String(d),{size:50,w:on?800:400,color:on?'#6B2400':ok?'#2D2623':'#C8C2C2',align:'c'});
     if(ok)div(gridL,{left:(x-5)+'px',top:(y+40)+'px',width:'10px',height:'10px',borderRadius:'50%',background:'#FFD400'});
     if(ok){const hit=div(gridL,{left:(x-58)+'px',top:(y-50)+'px',width:'116px',height:(pitch-4)+'px',cursor:'pointer'});hit.dataset.i=di}}}
-function calRender(p){if(p>0&&calP==0){const dd=idxDate(selI);calMonth=dd.getMonth()+1;drawGrid()}calP=p;sheet.style.opacity=Math.min(1,p/.3);sheet.style.clipPath=`inset(0 0 ${Math.max(0,Math.round(1136-(515+p*621)))}px 0)`;dimEl.style.opacity=.5*p;dimEl.style.pointerEvents=p>.02?'auto':'none';sheetBox.style.pointerEvents=p>.02?'auto':'none'}
+function calRender(p){if(p>0&&calP==0){const dd=idxDate(selI);calMonth=dd.getMonth()+1;drawGrid()}calP=p;sheet.style.opacity=Math.min(1,p/.3);sheet.style.clipPath=`inset(0 0 ${Math.max(0,Math.round(1136-(515+p*621)))}px 0)`;dimEl.style.opacity=.5*p;dimEl.style.pointerEvents=p>.02?'auto':'none';sheetBox.style.pointerEvents=p>.02?'auto':'none';sheet.style.pointerEvents=p>.02?'auto':'none'}
 function calTo(p1,ms=360){if(calAnim)cancelAnimationFrame(calAnim);const p0=calP,t0=performance.now();
   const f=now=>{const k=Math.min(1,(now-t0)/ms);calRender(p0+(p1-p0)*(1-Math.pow(1-k,3)));if(k<1)calAnim=requestAnimationFrame(f);else{calAnim=null;if(p1==0)setPop(false)}};calAnim=requestAnimationFrame(f)}
 monthBtn.onclick=e=>{e.stopPropagation();sfx('tap');setPop(!popOpen)};
@@ -1312,7 +1314,7 @@ function goalDrop(parent,ox,oy,onPick,hitParent){ // label + arrow + dropdown, d
 }
 // my (내 노타)
 const my=mkPage('my');imgIn('X/my1_clean.png',my);
-const MY1=ovl(my,true);MY1.style.zIndex=6;const gd1=goalDrop(MY1,0,0);
+const MY1=ovl(my,true);MY1.style.zIndex=6;txt(MY1,324,511,START_STR+'부터 <b style="font-weight:800;color:#FF006B">60일째</b>',{size:40,w:400,color:'#680011',html:true});const gd1=goalDrop(MY1,0,0);
 hot(my,.015,.04,.14,.09,()=>{gd1.close();show('home','back')});hot(my,.86,.05,.99,.105,()=>show('settings','push'));
 hot(my,.55,.325,.94,.365,()=>{gd1.close();show('my2')});navHS(my,'my');
 my.onEnter=()=>gd1.paint();my.onLeave=()=>gd1.close();
@@ -1388,7 +1390,7 @@ const fAge=field(640,'나이',`<input ${inpCss} type="number" inputmode="numeric
 txt(pc,60,830,'성별',{size:34,w:700,color:'#8A1040'});
 const sexBtns=['남성','여성','선택 안 함'].map((s,i)=>{const b=div(pc,{left:(50+i*250)+'px',top:'860px',width:'230px',height:'86px',borderRadius:'43px',cursor:'pointer',pointerEvents:'auto'});b.k=s;b.t=txt(b,115,43,s,{size:36,w:800,align:'c'});b.onclick=()=>{sfx('tap');ST.sex=s;paintSex()};return b});
 function paintSex(){sexBtns.forEach(b=>{const on=b.k==ST.sex;b.style.background=on?'#FFA800':'#fff';b.t.style.color=on?'#fff':'#a98';b.style.boxShadow=on?'0 6px 0 #D98800':'0 6px 0 rgba(138,16,64,.15)'})}paintSex();
-txt(pc,60,1010,'금연 시작일',{size:34,w:700,color:'#8A1040'});txt(pc,60,1080,'2026년 5월 3일 (60일째)',{size:40,w:600,color:'#3b2b22'});
+txt(pc,60,1010,'금연 시작일',{size:34,w:700,color:'#8A1040'});txt(pc,60,1080,START_STR+' (60일째)',{size:40,w:600,color:'#3b2b22'});
 const saveB=div(pBody,{left:'30px',top:'1260px',width:'830px',height:'130px',borderRadius:'65px',background:'#FFCD00',boxShadow:'0 12px 0 #D9A700',cursor:'pointer',pointerEvents:'auto'});txt(saveB,415,65,'저장하기',{size:50,w:900,color:'#5a3a12',align:'c'});
 div(pBody,{left:'0px',top:'1450px',width:'1px',height:'1px'});
 saveB.onclick=()=>{sfx('win');ST.name=fName.querySelector('input').value||ST.name;ST.town=fTown.querySelector('input').value||ST.town;ST.age=+fAge.querySelector('input').value||ST.age;toast('저장했어요');show('settings','back')};
