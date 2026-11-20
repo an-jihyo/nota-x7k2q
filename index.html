@@ -756,7 +756,7 @@ let holding=false,soundOn=true,alarmRun=null,game=null;
 
 // ---------- layout ----------
 function layout(){
-  const _st=document.getElementById('stage'),vw=(_st&&_st.clientWidth)||innerWidth,vh=(_st&&_st.clientHeight)||innerHeight,AR=852/393;const k=vh/(vw*AR);let w,h;if(k>=.94&&k<=1.06&&vw<700){w=vw;h=vh}else{w=Math.min(vw,vh/AR);h=w*AR}
+  const _st=document.getElementById('stage'),vw=(_st&&_st.clientWidth)||innerWidth,vh=(_st&&_st.clientHeight)||innerHeight,AR=852/393;const k=vh/(vw*AR);let w,h;if(k>=.86&&k<=1.18&&vw<700){w=vw;h=vh}else{w=Math.min(vw,vh/AR);h=w*AR}
   scr.style.width=w+'px';scr.style.height=h+'px';
   document.documentElement.style.setProperty('--nf',(w/890).toFixed(5));document.documentElement.style.setProperty('--nfy',(h/1939).toFixed(5));
   scr.classList.toggle('frame',vw>w*1.18||vh>h*1.08);
