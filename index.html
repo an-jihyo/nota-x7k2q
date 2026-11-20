@@ -27,7 +27,7 @@ html,body{height:100%;margin:0;padding:0;overflow:hidden;background:#00D2B2;over
 @keyframes rip{from{transform:scale(.3);opacity:.9}to{transform:scale(1.5);opacity:0}}
 .pulse{position:absolute;z-index:25;border-radius:50%;border:calc(var(--nf)*10px) solid #fff;pointer-events:none;animation:pulse 1.1s ease-out infinite}
 @keyframes pulse{from{transform:scale(.55);opacity:.95}to{transform:scale(1.35);opacity:0}}
-.hint{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);z-index:30;background:#fff;color:var(--blue);font-weight:800;font-size:calc(var(--nf)*44px);padding:calc(var(--nf)*20px) calc(var(--nf)*44px);border-radius:999px;box-shadow:0 calc(var(--nf)*10px) 0 rgba(0,50,100,.2);white-space:nowrap;pointer-events:none;transition:opacity .25s,transform .25s}
+.hint{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);z-index:30;background:#fff;color:var(--blue);font-weight:800;font-size:calc(var(--nf)*44px);padding:calc(var(--nf)*20px) calc(var(--nf)*44px);border-radius:999px;box-shadow:0 calc(var(--nf)*10px) 0 rgba(0,50,100,.2);white-space:pre-line;text-align:center;line-height:1.3;width:max-content;max-width:86%;box-sizing:border-box;pointer-events:none;transition:opacity .25s,transform .25s}
 .hint.off{opacity:0;transform:translateX(-50%) translateY(20px)}
 .endc{position:absolute;left:9%;right:9%;top:31%;z-index:40;background:#fff;color:var(--ink);border-radius:calc(var(--nf)*80px);padding:calc(var(--nf)*70px) calc(var(--nf)*50px) calc(var(--nf)*56px);text-align:center;box-shadow:0 calc(var(--nf)*16px) 0 rgba(0,50,100,.22);animation:endin .5s cubic-bezier(.2,1.5,.4,1) both}
 @keyframes endin{from{transform:scale(.5);opacity:0}to{transform:none;opacity:1}}
@@ -888,7 +888,7 @@ const imgIn=(src,p)=>{const i=img(src,null,p);return i};
 
 // ---------- splash ----------
 const splash=mkPage('splash');imgIn('X/splash.png',splash);
-txt(nat(splash),800,170,'v25',{size:28,w:700,color:'rgba(255,255,255,.6)',align:'c'});
+txt(nat(splash),800,170,'v26',{size:28,w:700,color:'rgba(255,255,255,.6)',align:'c'});
 // ---------- home ----------
 const home=mkPage('home');imgIn('X/home_clean.png',home);
 const _sd=new Date();_sd.setDate(_sd.getDate()-59);const START_STR=_sd.getFullYear()+'년 '+(_sd.getMonth()+1)+'월 '+_sd.getDate()+'일';
@@ -1517,7 +1517,7 @@ function runBalloon(p,lay){
     const s=G.st;
     if(s.away>=0)hint.set(s.level>=BALLOON_LEVELS-1?'풍선이 날아갔어요!':'날아갔어요! 다음은 더 무거운 걸 날려 봐요',false);
     else if(blowing)hint.set('좋아요! 계속 불어요',false);
-    else hint.set(s.tot<.1?(mic.on?'마이크에 후~ 불거나, 화면을 꾹 눌러서 풍선을 불어요':'화면을 꾹 눌러서 풍선을 불어요'):'계속 불어서 풍선을 더 달아요',false);
+    else hint.set(s.tot<.1?(mic.on?'마이크에 후~ 불거나,\n화면을 꾹 눌러서 풍선을 불어요':'화면을 꾹 눌러서 풍선을 불어요'):'계속 불어서 풍선을 더 달아요',false);
   }
 }
 
@@ -1641,7 +1641,7 @@ function runDive(p,lay){
   let ended=false;
   loop=(dt,t)=>{window.RINGT=t;
     if(phase=='free'){lt+=dt;if(lt>=HOLD){lt=HOLD;phase='wait'}}
-    else if(phase=='wait'){hint.set('꾹 누르면 잠수 · 손 떼면 1st 랩 끝',false);if(holding){phase='dive';sfx('jump')}}
+    else if(phase=='wait'){hint.set('꾹 누르면 잠수 ·\n손 떼면 1st 랩 끝',false);if(holding){phase='dive';sfx('jump')}}
     else if(phase=='dive'){
       if(lt<SPL){if(holding){lt+=dt;hint.set('숨을 참는 중…',false);if(lt>=SPL-.02&&!p._sp){p._sp=1;sfx('splash')}}
         else{phase='rewind';hint.set('조금만 더 길게 눌러 보세요',false)}}
