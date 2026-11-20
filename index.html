@@ -756,12 +756,12 @@ let holding=false,soundOn=true,alarmRun=null,game=null;
 
 // ---------- layout ----------
 function layout(){
-  const vw=innerWidth,vh=innerHeight,AR=852/393;const k=vh/(vw*AR);let w,h;if(k>=.94&&k<=1.06&&vw<700){w=vw;h=vh}else{w=Math.min(vw,vh/AR);h=w*AR}
+  const _st=document.getElementById('stage'),vw=(_st&&_st.clientWidth)||innerWidth,vh=(_st&&_st.clientHeight)||innerHeight,AR=852/393;const k=vh/(vw*AR);let w,h;if(k>=.94&&k<=1.06&&vw<700){w=vw;h=vh}else{w=Math.min(vw,vh/AR);h=w*AR}
   scr.style.width=w+'px';scr.style.height=h+'px';
   document.documentElement.style.setProperty('--nf',(w/890).toFixed(5));document.documentElement.style.setProperty('--nfy',(h/1939).toFixed(5));
   scr.classList.toggle('frame',vw>w*1.18||vh>h*1.08);
 }
-addEventListener('resize',layout);layout();
+addEventListener('resize',layout);addEventListener('orientationchange',()=>setTimeout(layout,300));if(window.visualViewport)visualViewport.addEventListener('resize',layout);layout();[120,500,1200,2500].forEach(t=>setTimeout(layout,t));
 function toNat(e){const r=scr.getBoundingClientRect();return [(e.clientX-r.left)/r.width*890,(e.clientY-r.top)/r.height*1939]}
 
 // ---------- tiny sounds ----------
@@ -923,7 +923,7 @@ const restTopF=()=>1185+308*(MATES.length-3);
 const clipBox=div(MA,{left:'0px',top:'236px',width:'890px',height:'1499px',overflow:'hidden',pointerEvents:'auto',touchAction:'none'});
 const mIn=div(clipBox,{left:'0px',top:'0px',width:'890px',height:'1499px',willChange:'transform'});
 const cards=[];
-function mkOrigCard(i){const e=div(mIn,{left:'0px',top:(TOPS(i)-8-236)+'px',width:'890px',height:'315px',willChange:'transform',cursor:'pointer'});img('X/mt_c'+i+'.png',null,e);return e}
+function mkOrigCard(i){const e=div(mIn,{left:'0px',top:(TOPS(i)-8-236)+'px',width:'890px',height:'315px',willChange:'transform',cursor:'pointer'});img('X/mt_c'+i+'.png',null,e);txt(e,322,205,START_STR+'부터 <b style="font-weight:800">60일째</b>',{size:42,w:400,color:'#7A4A2A',html:true});return e}
 function dateStr(days){const d=new Date();d.setDate(d.getDate()-days);return d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일'}
 function mkDynCard(i,m){const e=div(mIn,{left:'0px',top:(TOPS(i)-8-236)+'px',width:'890px',height:'315px',willChange:'transform',cursor:'pointer'});
   div(e,{left:'20px',top:'8px',width:'848px',height:'283px',borderRadius:'46px',background:'#F8F5CB',boxShadow:'0 14px 0 #2FA3AF'});
